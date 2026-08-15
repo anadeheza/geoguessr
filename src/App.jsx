@@ -4,7 +4,7 @@ import { GuessMap } from './components/GuessMap'
 import { distance, calcScore } from './utils/geo'
 import locations  from './data/locations.json'
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.GOOGLE_MAPS_API_KEY 
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_API_KEY 
 
 export default function App() {
   const [round, setRound] = useState(0)

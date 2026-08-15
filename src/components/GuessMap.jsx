@@ -51,7 +51,7 @@ export function GuessMap({onGuessSubmit, isGuessing}) {
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <LocationMarker onSelectLocation={(coords) => setSelectedPoint(coords)} />
+                <LocationMarker onSelectLoc={(coords) => setSelectedPoint(coords)} />
             </MapContainer>
 
             <button 
