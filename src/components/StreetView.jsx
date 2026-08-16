@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react"
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader"
 
+let isApiIn = false;
+
 export function StreetView({ lat, lng, apiKey }) {
     const container = useRef(null)
     const panorama = useRef(null)
@@ -8,12 +10,17 @@ export function StreetView({ lat, lng, apiKey }) {
     useEffect(() => {
         if (!apiKey) return;
 
-        setOptions({
-            apiKey: apiKey,
-            version: "weekly"
-        })
+        if(!isApiIn) {
+            try{
+                setOptions({
+                    key: apiKey,
+                    version: "weekly"
+                })
+                isApiIn = true
+            } catch(e) { }
+        }
 
-        let isMounted = true;
+        let isMounted = true 
 
         importLibrary("streetView").then(({ StreetViewPanorama }) => {
             if (!container.current || !isMounted) return
@@ -25,7 +32,7 @@ export function StreetView({ lat, lng, apiKey }) {
                     pov: { heading: 0, pitch: 0 },
                     zoom: 1,
                     disableDefaultUI: true,
-                    showRoadNames: false, // En false para ocultar los nombres de calles
+                    showRoadNames: true,
                     clickToGo: true,
                     addressControl: false,
                 }
