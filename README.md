@@ -1,7 +1,6 @@
 # Geo Guesser
 
-A web app like GeoGuessr, you just guess random places around the world, built With
-React + Vite, i used the Google Maps API ( Street View Panorama and Street View Service), the React Leaflet and Leaflet (for the Interactive Guess Map) and CartoDB Voyager Map Tiles (to have English countries/cities' names)
+A web app like GeoGuessr, you just guess random places around the world, built with React + Vite, i used the Google Maps API ( Street View Panorama and Street View Service), the React Leaflet and Leaflet (for the Interactive Guess Map) and CartoDB Voyager Map Tiles (to have English countries/cities' names)
 
 ## How to Play
 The game is pretty simple actually, you get a random place where you can move around, by going forward, backward, rotating and zooming in and out
@@ -10,15 +9,15 @@ When you think you know which place it is, go to the map in the corner to expand
 
 A line connecting your guess to the actual location will appear on the map and a popup with your score in the middle of the screen, click the  "Next Round" button to keep playing
 
-## Scoring and Rounds
+## Score and Rounds
 * Rounds: The game is infinite, every round dynamically fetches a new random location with coverage, most times it is outdoors but sometimes you get an indoors location
 * Score: Points are calculated based on the distance between your guess and the actual location using the Haversine formula
 
 > Haversine formula: the angle in radians multiplied with the earth radius to get the distance; 
 <br>
-c = angle between the two locations with the eath's center as the vertex
+> c = angle between the two locations with the eath's center as the vertex
 <br>
-a = the haversine of the angle, i don't really know how to explain how this works, it is the square of the half of a line that connects the two locations going through the center of the earth
+> a = the haversine of the angle, i don't really know how to explain how this works, it is the square of the half of a line that connects the two locations going through the center of the earth
 
 * Score per guess: the maximum is 5000 points (within 50 meters), from there, the points decrease exponentially as distance increases, up to 20000 kilometers where the score would be 0
 
