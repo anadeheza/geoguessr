@@ -75,12 +75,11 @@ export function GuessMap({onGuessSubmit, isGuessing, isResult, targetCoords}) {
                 height: isExpanded ? '440px' : '240px',
                 opacity: isExpanded ? 1 : 0.85,
                 zIndex: 1000,
-                borderRadius: '12px',
+                borderRadius: '15px',
                 overflow: 'hidden',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
                 display: 'flex',
                 flexDirection: 'column',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                transition: 'all 0.3s'
             }}
         >
             <MapContainer 
@@ -107,31 +106,31 @@ export function GuessMap({onGuessSubmit, isGuessing, isResult, targetCoords}) {
                                 [selectedPoint.lat, selectedPoint.lng],
                                 [targetCoords.lat, targetCoords.lng]
                             ]}
-                            pathOptions={{ color: '#ef4444', weight: 4, dashArray: '6, 8' }}
+                            pathOptions={{ color: '#000000d6', weight: 2, dashArray: '6, 8' }}
                         />
                         <FitBounds userCoords={selectedPoint} targetCoords={targetCoords} />
                     </>
                 )}
             </MapContainer>
 
-            {!isResult && (
+
                 <button 
                     onClick={() => onGuessSubmit(selectedPoint)}
-                    disabled={!selectedPoint || isGuessing}
+                    disabled={ !selectedPoint || isGuessing}
                     style={{
                         height: '15%',
-                        backgroundColor: selectedPoint ? '#22c55e' : '#6b7280',
+                        backgroundColor: selectedPoint && !isResult ? '#3d8b28' : '#6b7280',
                         color: 'white',
                         border: 'none',
                         fontSize: isExpanded ? '16px' : '14px',
                         fontWeight: 'bold',
-                        cursor: selectedPoint ? 'pointer' : 'not-allowed',
-                        transition: 'background-color 0.2s'
+                        cursor: selectedPoint && !isResult ? 'pointer' : 'not-allowed',
+                        transition: 'all 0.2s'
                     }}
                 >
                     GUESS
                 </button>
-            )}
+                
         </div>
     )
 }

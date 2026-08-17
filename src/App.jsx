@@ -13,12 +13,21 @@ export default function App() {
   const [currentLoc, setCurrentLoc] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  const [highScore, setHighScore] = useState(() => {
+    return Number(localStorage.getItem('highscore')) || 0
+  })
+
+  const [bestRound, setBestRound] = useState(0)
+  
+  const [isNewRecord, setIsNewRecord] = useState(false)
+
   useEffect(() => {
     loadNewLocation()
   }, [])
 
   const loadNewLocation = async () => {
     setLoading(true)
+    setIsNewRecord(false)
     const newLoc = await getRandomView()
     setCurrentLoc(newLoc)
     setLoading(false)
@@ -35,12 +44,33 @@ export default function App() {
     )
 
     const roundScore = calcScore(dist)
+    const newTotal = score + roundScore
 
-    setScore((prev) => prev + roundScore)
+    setScore(newTotal)
+    
+    let achieved = false
+
+    if(roundScore > bestRound) {
+      setBestRound(roundScore)
+      localStorage.setItem('best', roundScore)
+      achieved = true
+    }
+
+    if(newTotal > highScore) {
+      setHighScore(newTotal)
+      localStorage.setItem('highscore', newTotal)
+      achieved = true
+    }
+
+    setIsNewRecord(achieved)
+
+    
+
     setRes({
       distance: Math.round(dist),
       score: roundScore
     })
+
   }
 
   const handleNext = () => {
@@ -57,10 +87,9 @@ export default function App() {
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
-        backgroundColor: '#1e293b',
+        backgroundColor: '#000000',
         color: 'white',
-        fontFamily: 'sans-serif',
-        fontSize: '24px'
+        fontSize: '25px'
       }}>
         ...
       </div>
@@ -75,14 +104,20 @@ export default function App() {
         top: 20,
         left: 20,
         zIndex: 2,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: '#00000080',
         color: 'white',
-        padding: '5px 15px',
+        padding: '10px 15px',
         fontFamily: 'sans-serif'
       }}>
         <div style={{ fontWeight: 'bold' }}>Round: {round}</div>
-        <div style={{ fontWeight: 'bold' }}>
-          Score: <span style={{ color: '#22c55e' }}>{score}</span>
+        <div style={{ fontWeight: 'bold', marginBottom: '3px' }}>
+          Score: <span style={{ color: '#72f938' }}>{score}</span>
+        </div>
+        <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+          Best Score: <strong style={{ color: '#f59e0b' }}>{highScore}</strong>
+        </div>
+        <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+          Best Round: <strong style={{ color: '#f59e0b' }}>{bestRound}</strong>
         </div>
       </div>
 
@@ -102,14 +137,19 @@ export default function App() {
       />
 
       {res && (
-        <div style={modalStyle}>
+        <div style={modal}>
+          {isNewRecord && (
+            <div style={badge}>
+              New Record!
+            </div>
+          )}
           <h2 style={{ margin: '0 0 10px 0' }}>Result</h2>
           <p>Place: <strong>{currentLoc.name}</strong></p>
           <p>Distance: <strong>{res.distance} km</strong></p>
-          <p style={{ fontSize: '18px', color: '#16a34a', fontWeight: 'bold' }}>
+          <p style={{ fontSize: '18px', color: '#3d8b28', fontWeight: 'bold' }}>
             +{res.score} points
           </p>
-          <button onClick={handleNext} style={buttonStyle}>
+          <button onClick={handleNext} style={button}>
             Next Round
           </button>
         </div>
@@ -118,29 +158,37 @@ export default function App() {
   );
 }
 
-const modalStyle = {
+const modal = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-  padding: '24px',
-  borderRadius: '12px',
+  backgroundColor: '#ffffffea',
+  padding: '20px',
   textAlign: 'center',
   zIndex: 3,
   minWidth: '280px',
-  boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
   fontFamily: 'sans-serif'
 }
 
-const buttonStyle = {
+const button = {
   marginTop: '15px',
   padding: '10px 20px',
-  backgroundColor: '#22c55e',
+  backgroundColor: '#3d8b28',
   color: 'white',
   border: 'none',
   borderRadius: '6px',
   fontSize: '16px',
   fontWeight: 'bold',
   cursor: 'pointer'
+}
+
+const badge = {
+  backgroundColor: '#f59e0b',
+  color: 'white',
+  fontWeight: 'bold',
+  fontSize: '15px',
+  padding: '5px 10px',
+  display: 'inline-block',
+  marginBottom: '10px'
 }
